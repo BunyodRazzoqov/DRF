@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'book.apps.BookConfig',
     'rest_framework',
+    'olcha.apps.OlchaConfig',
 ]
 
 MIDDLEWARE = [
