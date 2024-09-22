@@ -16,6 +16,7 @@ class BaseModel(models.Model):
 class Category(BaseModel):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(null=True, blank=True)
+    image = models.ImageField(upload_to='category/%Y/%m/%d/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -27,13 +28,13 @@ class Category(BaseModel):
 
     class Meta:
         verbose_name_plural = 'Categories'
-        db_table = 'Categories'
 
 
 class Group(BaseModel):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(null=True, blank=True)
-    category = models.ManyToManyField(Category, related_name='groups')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='groups')
+    image = models.ImageField(upload_to='category/%Y/%m/%d/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -45,7 +46,6 @@ class Group(BaseModel):
 
     class Meta:
         verbose_name_plural = 'Groups'
-        db_table = 'Groups'
 
 
 class Product(BaseModel):

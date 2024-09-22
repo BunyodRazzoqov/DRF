@@ -2,29 +2,25 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from olcha.serializers import CategorySerializer, GroupSerializer
-from olcha.models import Category, Group
+from olcha.serializers import CategorySerializer, GroupSerializer, ProductSerializer
+from olcha.models import Category, Group, Product
 
 
 class CategoryList(APIView):
     def get(self, request):
         categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
+        serializer = CategorySerializer(categories, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            data = {
-                'success': True,
-                'message': 'Category created successfully'
-            }
-            return Response(data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -106,3 +102,14 @@ class GroupDetailApiView(APIView):
             return Response(data={'error': 'Book not found'}, status=status.HTTP_400_BAD_REQUEST)
         group.delete()
         return Response(data={'status': 'success'}, status=status.HTTP_200_OK)
+
+
+class ProductCreate(ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+class ProductDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'slug'
