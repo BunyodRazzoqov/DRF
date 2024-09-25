@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from olcha.models import Category, Group, Product
+from olcha.models import Category, Group, Product, Order, Comment, Attribute, AttributeValue, ProductAttribute, Image
+
+admin.site.register(Order)
+admin.site.register(Comment)
+admin.site.register(Attribute)
+admin.site.register(AttributeValue)
+admin.site.register(ProductAttribute)
+admin.site.register(Image)
 
 
 # Register your models here.
