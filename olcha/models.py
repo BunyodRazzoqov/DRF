@@ -57,7 +57,7 @@ class Product(BaseModel):
     price = models.FloatField(null=True, blank=True)
     discount = models.IntegerField(default=0, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=0, null=True, blank=True)
-    users_like = models.ManyToManyField(User, related_name='products')
+    users_like = models.ManyToManyField(User, related_name='products', null=True, blank=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='products')
 
     @property
@@ -94,7 +94,7 @@ class Image(BaseModel):
             return self.image
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Order(BaseModel):
