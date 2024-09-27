@@ -133,27 +133,27 @@ class Comment(BaseModel):
         return self.message
 
 
-class Attribute(BaseModel):
-    name = models.CharField(max_length=255, null=True, blank=True)
+class AttributeKey(BaseModel):
+    key_name = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.key_name
 
     class Meta:
         db_table = 'attribute'
 
 
 class AttributeValue(BaseModel):
-    value = models.CharField(max_length=255, null=True, blank=True)
+    value_name = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.value
+        return self.value_name
 
     class Meta:
         db_table = 'attribute_value'
 
 
 class ProductAttribute(BaseModel):
-    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+    attribute = models.ForeignKey(AttributeKey, on_delete=models.CASCADE)
     value = models.ForeignKey(AttributeValue, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

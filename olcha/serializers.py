@@ -1,6 +1,6 @@
 from django.db.models import Avg
 from rest_framework import serializers
-from olcha.models import Category, Group, Product, Comment
+from olcha.models import Category, Group, Product, Comment, ProductAttribute, AttributeKey, AttributeValue
 from datetime import datetime
 
 
@@ -54,20 +54,22 @@ class ProductSerializer(serializers.ModelSerializer):
     users_comment = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True, read_only=True)
     count_comments = serializers.SerializerMethodField(method_name='counts')
-    users_like = serializers.BooleanField()
+    users_like = serializers.SerializerMethodField()
     ratings = serializers.SerializerMethodField()
+    category_name = serializers.CharField(source='group.category.title')
 
     def get_ratings(self, obj):
         ratings = obj.comments.all().values_list('rating', flat=True).aggregate(avg=Avg('rating'))
         return ratings
 
-    def get_users_like(self, obj):
-        if obj.users_like:
-            obj.users_like = True
-        else:
-            obj.users_like = False
+    def get_users_like(self, product):
+        user = self.context.get('request').user
+        if not user.is_authenticated:
+            return False
+        if user in product.users_like.all():
+            return True
 
-        return obj.users_like
+        return False
 
     def counts(self, obj):
         count = obj.comments.count()
@@ -90,3 +92,21 @@ class ProductSerializer(serializers.ModelSerializer):
         context = super(ProductSerializer, self).to_representation(instance)
         context['updated_at'] = datetime.now()
         return context
+
+
+class ProductAttributeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductAttribute
+        fields = '__all__'
+
+
+class AttributeKeySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AttributeKey
+        fields = '__all__'
+
+
+class AttributeValueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AttributeValue
+        fields = '__all__'

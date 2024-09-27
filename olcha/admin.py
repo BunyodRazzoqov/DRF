@@ -1,16 +1,22 @@
 from django.contrib import admin
 
-from olcha.models import Category, Group, Product, Order, Comment, Attribute, AttributeValue, ProductAttribute, Image
+from olcha.models import Category, Group, Product, Order, Comment, AttributeKey, AttributeValue, ProductAttribute, Image
 
 admin.site.register(Order)
 admin.site.register(Comment)
-admin.site.register(Attribute)
+admin.site.register(AttributeKey)
 admin.site.register(AttributeValue)
-admin.site.register(ProductAttribute)
 admin.site.register(Image)
 
 
 # Register your models here.
+
+
+@admin.register(ProductAttribute)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'attribute', 'value', 'created_at')
+    search_fields = ('id', 'attribute', 'value')
+    list_filter = ('created_at',)
 
 
 @admin.register(Category)
