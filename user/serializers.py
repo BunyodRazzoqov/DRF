@@ -8,16 +8,12 @@ from rest_framework.authtoken.models import Token
 class UserRegisterSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     username = serializers.CharField()
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
-    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "username", "first_name",
-                  "last_name", "email", "password", "password2"]
+        fields = ["id", "username", "password", "password2"]
         extra_kwargs = {
             'password': {"write_only": True}
         }
@@ -33,9 +29,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def validate(self, instance):
         if instance['password'] != instance['password2']:
             raise ValidationError({"message": "Both password must match"})
-
-        if User.objects.filter(email=instance['email']).exists():
-            raise ValidationError({"message": "Email already taken!"})
 
         return instance
 
