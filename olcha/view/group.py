@@ -1,11 +1,17 @@
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from olcha.serializers import GroupSerializer
 from olcha.models import Group
 
 
 class GroupList(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
     def get(self, request):
         groups = Group.objects.all()
         serializer = GroupSerializer(groups, many=True)
@@ -25,6 +31,9 @@ class GroupList(APIView):
 
 
 class GroupDetailApiView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
     def get_object(self, pk):
         try:
             return Group.objects.get(id=pk)

@@ -41,7 +41,7 @@ class UserLogoutApiView(APIView):
 
 
 class UserRegisterAPIView(APIView):
-    def post(self, request, *args, **kargs):
+    def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

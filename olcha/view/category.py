@@ -1,11 +1,17 @@
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from olcha.serializers import CategorySerializer
 from olcha.models import Category
 
 
 class CategoryList(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
     def get(self, request):
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True, context={'request': request})
@@ -21,6 +27,9 @@ class CategoryList(APIView):
 
 
 class CategoryDetailApiView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, pk):
         try:
             return Category.objects.get(id=pk)

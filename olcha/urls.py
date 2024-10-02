@@ -6,6 +6,7 @@ urlpatterns = [
     path('groups/', group.GroupList.as_view()),
     path('categories/detail/<int:pk>/', category.CategoryDetailApiView.as_view()),
     path('groups/detail/<int:pk>/', group.GroupDetailApiView.as_view()),
+
     path('products/', product.ProductCreate.as_view()),
     path('products/detail/<slug:slug>/', product.ProductDetail.as_view()),
 
@@ -18,3 +19,9 @@ urlpatterns = [
     path('product/attributevalues/', product_attributes.AttributeValueApiView.as_view()),
     path('product/attributevalues/detail/<int:pk>/', product_attributes.AttributeValueDetail.as_view()),
 ]
+
+
+
+
+
+
