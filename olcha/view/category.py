@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from olcha.serializers import CategorySerializer
 from olcha.models import Category
+from olcha.serializers import CategorySerializer
 
 
 class CategoryList(APIView):
